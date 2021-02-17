@@ -1,19 +1,13 @@
 const express = require('express');
 const app = express();
 
-// app.use((req, res, next) => {
-//   //middleware gets applied to all handlers
-//   //gets called before the callback on each handler
-//   console.log('Request incoming');
-//   console.log(req.originalUrl);
-//   console.log(req.headers['user-agent']);
-//   next();
-// });
-
 //parse body to json; a string of information
 app.use(express.json());
 
 // Todo: Make endpoints
+
+const allListings = [];
+const allInquiries = [];
 
 const body = {
   title: null,
@@ -23,51 +17,45 @@ const body = {
   uid: 0
 };
 
-//body should have json****
+var response = {
+  success: false,
+  items: allListings,
+  inquiries: allInquiries,
+  errorCode: 404
+}
+
 app.post('/createListing', (req, res) => {
-  console.log(req.body);
-  uid++;
-  res.status(200).send('Body received.');
-});
-
-
-//returns all listings
-app.post('/api/viewListings', (req, res) => {
-  console.log(req.allListings);
-  res.status(200).send('allListings received.');
-});
-
-//delete listing by uid
-app.delete('/api/deleteListing', (req, res) => {
-  //req.query.id
-});
-
-//make inquiry(like comment to ask about listing)
-app.post('/api/makeInquiry', (req, res) => {
-  //body should have json
-});
-
-////returns all inquiries for a listing
-app.get('/api/getInquiries', (req, res) => {
-  
+  // var responseCode = {
+  //   success: true,
+  //   items: allListings,
+  //   inquiries: allInquiries,
+  //   errorCode: 404
+  // }
+  // var bodyText = new body();
+  // bodyText.description = req.data.description;
+  // bodyText.type = req.data.type;
+  // bodyText.title = req.data.title;
+  // bodyText.price = req.data.price;
+  // bodyText.uid++;
+  // items.push(bodyText);
+  res.status(200).send();
+  console.log(res.statusCode);
+  console.log('createlisting');
+  // console.log(req.body);
 });
 
 //default route
 app.get('/', (req, res) => {
-  res.status(404).send('Hello World!!!');
+  res.status(200).send(JSON.stringify(response));
   console.log(res.statusCode);
 });
 
 //for random endpoint entered
 app.get('*', (req, res) => {
-  res.status(404);
+  res.status(200).send(JSON.stringify(response));
   console.log(res.statusCode);
 });
 
-// app.post('/listingB', (req, res) => {
-//   console.log(req.response);
-//   console.log('Response received.');
-// });
 
 
 module.exports = app;
