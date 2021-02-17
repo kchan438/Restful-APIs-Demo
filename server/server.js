@@ -6,52 +6,66 @@ app.use(express.json());
 
 // Todo: Make endpoints
 
-const allListings = [];
-const allInquiries = [];
+var allListings = [];
+var allInquiries = [];
 
-const body = {
-  title: null,
-  description: null,
-  price: null,
-  type: null,
-  uid: 0
-};
 
-var response = {
-  success: false,
-  items: allListings,
-  inquiries: allInquiries,
-  errorCode: 404
-}
-
-app.post('/createListing', (req, res) => {
-  // var responseCode = {
-  //   success: true,
-  //   items: allListings,
-  //   inquiries: allInquiries,
-  //   errorCode: 404
-  // }
-  // var bodyText = new body();
-  // bodyText.description = req.data.description;
-  // bodyText.type = req.data.type;
-  // bodyText.title = req.data.title;
-  // bodyText.price = req.data.price;
-  // bodyText.uid++;
-  // items.push(bodyText);
-  res.status(200).send();
-  console.log(res.statusCode);
-  console.log('createlisting');
-  // console.log(req.body);
+app.post('/api/createListing', (req, res) => {
+  var response = {
+    success: true,
+    items: allListings = [],
+    inquiries: allInquiries,
+    errorCode: 200
+  }
+    var body = {
+    title: '',
+    description: '',
+    price: '',
+    type: '',
+    id: 'kangaroo'
+  };
+  body.title = req.body.title;
+  body.description = req.body.description;
+  body.price = req.body.price;
+  body.type = req.body.type;
+  response.items.push(body);
+  res.status(200).send(JSON.stringify(response));
+  console.log('statusCode: ' + res.statusCode);
 });
+
+app.get('/api/viewListings', (req, res) => {
+  var response = {
+    success: true,
+    items: allListings,
+    inquiries: allInquiries,
+    errorCode: 200
+  }
+  res.status(200).send(JSON.stringify(response));
+  console.log(res.statusCode);
+});
+
+
 
 //default route
 app.get('/', (req, res) => {
+  var response = {
+    success: false,
+    items: allListings,
+    inquiries: allInquiries,
+    errorCode: 404
+  }
   res.status(200).send(JSON.stringify(response));
   console.log(res.statusCode);
 });
 
 //for random endpoint entered
 app.get('*', (req, res) => {
+  var response = {
+    success: false,
+    items: allListings,
+    inquiries: allInquiries,
+    errorCode: 404
+  }
   res.status(200).send(JSON.stringify(response));
   console.log(res.statusCode);
 });
