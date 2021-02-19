@@ -19,10 +19,10 @@ let response = {
 
 app.post('/api/createListing', (req, res) => {
     var body = {
-    title: req.body.title,
-    description: req.body.description,
-    price: req.body.price,
-    type: req.body.type,
+    title: '',
+    description: '',
+    price: '',
+    type: '',
     id: 'kangaroo'
   };
   body.title = req.body.title;
