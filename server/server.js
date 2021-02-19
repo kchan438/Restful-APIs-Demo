@@ -9,19 +9,20 @@ app.use(express.json());
 var allListings = [];
 var allInquiries = [];
 
+let response = {
+  success: true,
+  items: allListings,
+  inquiries: allInquiries,
+  errorCode: 200
+}
+
 
 app.post('/api/createListing', (req, res) => {
-  var response = {
-    success: true,
-    items: allListings = [],
-    inquiries: allInquiries,
-    errorCode: 200
-  }
     var body = {
-    title: '',
-    description: '',
-    price: '',
-    type: '',
+    title: req.body.title,
+    description: req.body.description,
+    price: req.body.price,
+    type: req.body.type,
     id: 'kangaroo'
   };
   body.title = req.body.title;
@@ -34,38 +35,54 @@ app.post('/api/createListing', (req, res) => {
 });
 
 app.get('/api/viewListings', (req, res) => {
-  var response = {
-    success: true,
-    items: allListings,
-    inquiries: allInquiries,
-    errorCode: 200
+  response.success = true;
+  response.errorCode = 200;
+  // console.log('viewListings: ' + allListings[0].type);
+  var type = req.query.type;
+  // console.log('query type value: ' + type);
+  if(type !== null || type !== undefined) {
+    var filteredArr = [];
+    var response2 = {
+      success: true,
+      items: filteredArr,
+      inquiries: allInquiries,
+      errorCode: 200,
+    }
+    var arr = allListings.filter(value => value.type === type);
+    for(var i of arr) {
+      response2.items.push(i);
+    }
+    res.status(200).send(JSON.stringify(response2));
+  } else{
+    res.status(200).send(JSON.stringify(response));
+  }
+  // console.log(res.statusCode);
+});
+
+//even though test passes, still need to implement deleting functionality
+app.get('/api/deleteListing', (req, res) => {
+  console.log('items length: ' + response.items.length);
+  for(var i = 0; i < response.items.length-1; i++) {
+    if(response.items[i].id === req.query.id) {
+      response.items.splice(i, 1); 
+      break;
+    }
   }
   res.status(200).send(JSON.stringify(response));
   console.log(res.statusCode);
 });
 
-
-
 //default route
 app.get('/', (req, res) => {
-  var response = {
-    success: false,
-    items: allListings,
-    inquiries: allInquiries,
-    errorCode: 404
-  }
+  errorCode = 200;
   res.status(200).send(JSON.stringify(response));
   console.log(res.statusCode);
 });
 
 //for random endpoint entered
 app.get('*', (req, res) => {
-  var response = {
-    success: false,
-    items: allListings,
-    inquiries: allInquiries,
-    errorCode: 404
-  }
+  response.success = false;
+  response.errorCode = 404;
   res.status(200).send(JSON.stringify(response));
   console.log(res.statusCode);
 });
