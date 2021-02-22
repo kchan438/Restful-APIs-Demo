@@ -9,7 +9,7 @@ app.use(express.json());
 var allListings = [];
 var allInquiries = [];
 
-let response = {
+var response = {
   success: true,
   items: allListings,
   inquiries: allInquiries,
@@ -30,37 +30,36 @@ app.post('/api/createListing', (req, res) => {
   body.price = req.body.price;
   body.type = req.body.type;
   response.items.push(body);
+  console.log(response.items);
   res.status(200).send(JSON.stringify(response));
   console.log('statusCode: ' + res.statusCode);
 });
 
 app.get('/api/viewListings', (req, res) => {
-  response.success = true;
-  response.errorCode = 200;
   // console.log('viewListings: ' + allListings[0].type);
+  res.status(200).send(JSON.stringify(response));
+  // console.log(res.statusCode);
+});
+
+app.get('/api/viewListings?type=<type>', (req, res) => {
   var type = req.query.type;
   // console.log('query type value: ' + type);
-  if(type !== null || type !== undefined) {
     var filteredArr = [];
     var response2 = {
       success: true,
       items: filteredArr,
       inquiries: allInquiries,
       errorCode: 200,
-    }
+    };
     var arr = allListings.filter(value => value.type === type);
     for(var i of arr) {
       response2.items.push(i);
     }
     res.status(200).send(JSON.stringify(response2));
-  } else{
-    res.status(200).send(JSON.stringify(response));
-  }
-  // console.log(res.statusCode);
 });
 
 //even though test passes, still need to implement deleting functionality
-app.get('/api/deleteListing', (req, res) => {
+app.get('/api/deleteListing?id=<id>', (req, res) => {
   console.log('items length: ' + response.items.length);
   for(var i = 0; i < response.items.length-1; i++) {
     if(response.items[i].id === req.query.id) {
@@ -69,8 +68,38 @@ app.get('/api/deleteListing', (req, res) => {
     }
   }
   res.status(200).send(JSON.stringify(response));
-  console.log(res.statusCode);
+  // console.log(res.statusCode);
 });
+
+app.post('/api/makeInquiry', (req, res) => {
+  response.success = false;
+  response.errorCode = 200;
+  var inquiry = {
+    id: 0,
+    message: '', 
+  };
+  inquiry.id = req.query.listingId;
+  inquiry.message = req.body.message;
+  response.inquiries.unshift(inquiry);
+  res.status(200).send(JSON.stringify(response));
+});
+
+// app.get('/api/getInquiries?listingId', (res, req) => {
+//   var queryID = req.query.listingId;
+//   var filteredInq = [];
+//   var inquiryResponse = {
+//     success: true,
+//     items: allListings,
+//     inquiries: filteredInq,
+//     errorCode: 200,
+//   };
+//   var arr2 = allInquiries.filter(value => value.id === queryID);
+//   console.log(arr2);
+//   for(var i of arr) {
+//     inquiryResponse.inquiries.push(i);
+//   }
+//   res.status(200).send(JSON.stringify(inquiryResponse));
+// });
 
 //default route
 app.get('/', (req, res) => {
