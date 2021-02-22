@@ -81,7 +81,11 @@ app.post('/api/makeInquiry', (req, res) => {
   res.status(200).send(response);
 });
 
-// app.get('api/getInquiries', (req, res) => {
+app.get('/api/getInquiries', (req, res) => {
+  res.status(200).send(response);
+});
+
+// app.get('/api/getInquiries?listingId=<listingId>', (req, res) => {
 //   const listingID = req.query.listingId;
 //   var filteredInquiries = [];
 //   var newResponse = {
@@ -90,7 +94,7 @@ app.post('/api/makeInquiry', (req, res) => {
 //     inquiries: filteredInquiries,
 //     errorCode: 200
 //   }
-// var arr2 = allInquiries.filter(value => value.id === queryID);
+// var arr2 = allInquiries.filter(value => value.id === listingID);
 // console.log(arr2);
 // for(var i of arr) {
 //   inquiryResponse.inquiries.push(i);
