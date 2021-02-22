@@ -36,7 +36,6 @@ app.post('/api/createListing', (req, res) => {
 });
 
 app.get('/api/viewListings', (req, res) => {
-  // console.log('viewListings: ' + allListings[0].type);
   res.status(200).send(JSON.stringify(response));
   // console.log(res.statusCode);
 });
@@ -72,33 +71,31 @@ app.get('/api/deleteListing?id=<id>', (req, res) => {
 });
 
 app.post('/api/makeInquiry', (req, res) => {
-  response.success = false;
-  response.errorCode = 200;
+  const listingID = req.query.listingId;
+  const reqMessage = req.body.message;
   var inquiry = {
-    id: 0,
-    message: '', 
+    id: listingID,
+    message: reqMessage
   };
-  inquiry.id = req.query.listingId;
-  inquiry.message = req.body.message;
-  response.inquiries.unshift(inquiry);
-  res.status(200).send(JSON.stringify(response));
+  response.inquiries.push(inquiry);
+  res.status(200).send(response);
 });
 
-// app.get('/api/getInquiries?listingId', (res, req) => {
-//   var queryID = req.query.listingId;
-//   var filteredInq = [];
-//   var inquiryResponse = {
+// app.get('api/getInquiries', (req, res) => {
+//   const listingID = req.query.listingId;
+//   var filteredInquiries = [];
+//   var newResponse = {
 //     success: true,
 //     items: allListings,
-//     inquiries: filteredInq,
-//     errorCode: 200,
-//   };
-//   var arr2 = allInquiries.filter(value => value.id === queryID);
-//   console.log(arr2);
-//   for(var i of arr) {
-//     inquiryResponse.inquiries.push(i);
+//     inquiries: filteredInquiries,
+//     errorCode: 200
 //   }
-//   res.status(200).send(JSON.stringify(inquiryResponse));
+// var arr2 = allInquiries.filter(value => value.id === queryID);
+// console.log(arr2);
+// for(var i of arr) {
+//   inquiryResponse.inquiries.push(i);
+// }
+//   res.status(200).send(newResponse);
 // });
 
 //default route
