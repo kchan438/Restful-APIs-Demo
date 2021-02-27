@@ -16,7 +16,7 @@ var response = {
   errorCode: 200
 }
 
-app.post('/api/createListing', (req, res) => {
+app.post('/api/createListing', (req, res) => {    //creates a listing for response.items
     var body = {
     title: '',
     description: '',
@@ -33,18 +33,17 @@ app.post('/api/createListing', (req, res) => {
     charset: 'numeric'
   });
   response.items.push(body);
-  console.log(response.items);
   res.status(200).send(JSON.stringify(response));
   console.log('statusCode: ' + res.statusCode);
 });
 
-app.get('/api/viewListings', (req, res) => {
-  res.status(200).send(JSON.stringify(response));
-  // console.log(res.statusCode);
-});
 
-app.get('/api/viewListings?type=<type>', (req, res) => {
-  var type = req.query.type;
+app.get('/api/viewListings', (req, res) => {  //view all item listings or filtered
+  if(!req.query.type) {
+    return res.status(200).send(JSON.stringify(response));
+  }
+  else {
+    const type = req.query.type;
     var filteredArr = [];
     var response2 = {
       success: true,
@@ -56,14 +55,14 @@ app.get('/api/viewListings?type=<type>', (req, res) => {
     for(var i of arr) {
       response2.items.push(i);
     }
-    res.status(200).send(JSON.stringify(response2));
+    return res.status(200).send(JSON.stringify(response2));
+  }
 });
 
-//even though test passes, still need to implement deleting functionality
-app.get('/api/deleteListing?id=<id>', (req, res) => {
-  console.log('items length: ' + response.items.length);
-  for(var i = 0; i < response.items.length-1; i++) {
-    if(response.items[i].id === req.query.id) {
+app.get('/api/deleteListing', (req, res) => {    //deletes a listing from response.items
+  const id = req.query.id;
+  for(var i = 0; i < response.items.length; i++) {
+    if(response.items[i].id === id) {
       response.items.splice(i, 1); 
       break;
     }
@@ -71,7 +70,7 @@ app.get('/api/deleteListing?id=<id>', (req, res) => {
   res.status(200).send(JSON.stringify(response));
 });
 
-app.post('/api/makeInquiry', (req, res) => {
+app.post('/api/makeInquiry', (req, res) => {    //inputs an inquiry into response.inquiries
   const listingID = req.query.listingId;
   const reqMessage = req.body.message;
   var inquiry = {
@@ -82,7 +81,7 @@ app.post('/api/makeInquiry', (req, res) => {
   res.status(200).send(response);
 });
 
-app.get('/api/getInquiries?listingId=<listingId>', (req, res) => {
+app.get('/api/getInquiries', (req, res) => {   //get list of inquiries
   const listingID = req.query.listingId;
   var filteredInquiries = [];
   var newResponse = {
@@ -110,8 +109,7 @@ app.get('*', (req, res) => {
   response.success = false;
   response.errorCode = 404;
   res.status(200).send(JSON.stringify(response));
-  // console.log(res.statusCode);
-  console.log('* is called');
+  console.log('* called');
 });
 
 module.exports = app;
